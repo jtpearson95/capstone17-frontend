@@ -5,7 +5,7 @@ import { GET_RESTAURANTS } from "../graphql/queries";
 import styles from "../styles/Home.module.css";
 import { Col, CardImg, Row } from "reactstrap";
 
-const STRAPI_URL = "https://capstone17-3fc1d2cfc034.herokuapp.com/";
+const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com/";
 
 export default function Home({ restaurants }) {
   console.log(restaurants);

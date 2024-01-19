@@ -12,7 +12,7 @@ import {
   Button
 } from "reactstrap";
 
-const STRAPI_URL = "https://capstone17-3fc1d2cfc034.herokuapp.com/";
+const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com/";
 
 const client = new ApolloClient({
   uri: `${STRAPI_URL}`,

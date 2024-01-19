@@ -8,7 +8,7 @@ import { Button } from 'reactstrap';
 
 function Home() {
 
-const STRAPI_URL = "https://capstone17-3fc1d2cfc034.herokuapp.com/";
+const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com/";
 console.log(`URL: ${STRAPI_URL}`);
 
 const [query, setQuery] = useState("");
