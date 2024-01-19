@@ -8,7 +8,8 @@ import { Button } from 'reactstrap';
 
 function Home() {
 
-  const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+
 console.log(`URL: ${STRAPI_URL}`);
 const [query, setQuery] = useState("");
 const link = new HttpLink({ uri: `${STRAPI_URL}/graphql`})

@@ -12,8 +12,10 @@ import {
   Button
 } from "reactstrap";
 
+const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+
 const client = new ApolloClient({
-  uri: "http://localhost:1337/graphql",
+  uri: `${STRAPI_URL}`,
   cache: new InMemoryCache(),
 });
 
@@ -32,7 +34,7 @@ export default function RestaurantDishes({ restaurant }) {
                 <CardImg
                   top={true}
                   style={{ height: 200 }}
-                  src={`http://localhost:1337${dish.image}`}
+                  src={`${STRAPI_URL}${dish.image}`}
                 />
                 <Button>Add to Cart</Button>
               </CardBody>
