@@ -69,7 +69,7 @@ export async function getStaticProps({ params }) {
   console.log(data);
 
   //const attrs = data.restaurants.data[0].attributes;
-  const attrs = data.restaurants.data.attributes;
+  const attrs = data.restaurants.data[0];
 
   const dishes = attrs.dishes.data.map((dish) => ({
     name: dish.attributes.name,
