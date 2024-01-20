@@ -14,10 +14,10 @@ import {
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
 
-const client = new ApolloClient({
-  uri: `${STRAPI_URL}`,
-  cache: new InMemoryCache(),
-});
+// const client = new ApolloClient({
+//   uri: `${STRAPI_URL}`,
+//   cache: new InMemoryCache(),
+// });
 
 export default function RestaurantDishes({ restaurant }) {
   return (

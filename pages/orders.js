@@ -43,18 +43,19 @@ export default function Home({ restaurants }) {
 }
 
 export async function getStaticProps() {
-  const client = new ApolloClient({
-    uri: `${STRAPI_URL}/graphql`,
-    cache: new InMemoryCache(),
-  });
+  // const client = new ApolloClient({
+  //   uri: `${STRAPI_URL}/graphql`,
+  //   cache: new InMemoryCache(),
+  // });
 
-  const { data } = await client.query({
-    query: GET_RESTAURANTS,
-  });
+  // const { data } = await client.query({
+  //   query: GET_RESTAURANTS,
+  // });
 
   return {
     props: {
-      restaurants: data.restaurants.data,
+      //restaurants: data.restaurants.data,
+      restaurants: null 
     },
   };
 }

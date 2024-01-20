@@ -14,7 +14,7 @@ console.log(`URL: ${STRAPI_URL}`);
 const [query, setQuery] = useState("");
 const link = new HttpLink({ uri: `${STRAPI_URL}/graphql`})
 const cache = new InMemoryCache()
-const client = new ApolloClient({link,cache});
+//const client = new ApolloClient({link,cache});
 
 const { user, setUser } = useContext(MyContext);
 const router = useRouter();
