@@ -49,39 +49,11 @@ export default function RestaurantDishes({ restaurant }) {
 //   );
 // }
 
-// export async function getStaticPaths() {
-//   const { data } = await client.query({ query: GET_ALL_SLUGS });
-
-//   const paths = data.restaurants.data.map((restaurant) => {
-//     return { params: { slug: restaurant.attributes.urlSlug } };
-//   });
-
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// }
-
-// export async function getStaticPaths() {
-//   const { data } = await client.query({ query: GET_ALL_SLUGS });
-
-//   const paths = data.restaurants.data.map((restaurant) => {
-//     const urlSlug = restaurant?.attributes?.urlSlug || "";
-//     return { params: { slug: urlSlug } };
-//   });
-
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// }
-
 export async function getStaticPaths() {
   const { data } = await client.query({ query: GET_ALL_SLUGS });
 
   const paths = data.restaurants.data.map((restaurant) => {
-    const urlSlug = restaurant?.attributes?.urlSlug || "";
-    return { params: { slug: urlSlug } };
+    return { params: { slug: restaurant.attributes.urlSlug } };
   });
 
   return {
@@ -98,7 +70,8 @@ export async function getStaticProps({ params }) {
 
   console.log(data);
 
-  const attrs = data.restaurants.data[0].attributes;
+  //const attrs = data.restaurants.data[0].attributes;
+  const attrs = data.restaurants.data.attributes;
 
   const dishes = attrs.dishes.data.map((dish) => ({
     name: dish.attributes.name,
