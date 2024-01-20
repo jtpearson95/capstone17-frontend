@@ -50,7 +50,7 @@ export default function RestaurantDishes({ restaurant }) {
 // }
 
 export async function getStaticPaths() {
-  const { data } = await client.query({ query: GET_ALL_SLUGS });
+  //const { data } = await client.query({ query: GET_ALL_SLUGS });
   console.log(JSON.stringify(data));
 
   data = {restaurants: {
