@@ -8,7 +8,7 @@ import { Col, CardImg, Row } from "reactstrap";
 const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
 
 export default function Home({ restaurants }) {
-  //console.log(restaurants);
+  console.log(restaurants);
   return (
     <div>
       <Head>
@@ -17,7 +17,7 @@ export default function Home({ restaurants }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>Welcome to the Restaurant!</h1>
-      {/* <Row>
+      <Row>
         {restaurants.map((val, i) => {
           return (
             <Col key={i} xs="6" sm="4">
@@ -37,25 +37,24 @@ export default function Home({ restaurants }) {
             </Col>
           );
         })}
-      </Row> */}
+      </Row>
     </div>
   );
 }
 
-// export async function getStaticProps() {
-//   // const client = new ApolloClient({
-//   //   uri: `${STRAPI_URL}/graphql`,
-//   //   cache: new InMemoryCache(),
-//   // });
+export async function getStaticProps() {
+  const client = new ApolloClient({
+    uri: `${STRAPI_URL}/graphql`,
+    cache: new InMemoryCache(),
+  });
 
-//   // const { data } = await client.query({
-//   //   query: GET_RESTAURANTS,
-//   // });
+  const { data } = await client.query({
+    query: GET_RESTAURANTS,
+  });
 
-//   return {
-//     props: {
-//       //restaurants: data.restaurants.data,
-//       restaurants: null 
-//     },
-//   };
-// }
+  return {
+    props: {
+      restaurants: data.restaurants.data,
+    },
+  };
+}
