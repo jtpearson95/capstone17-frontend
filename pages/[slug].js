@@ -62,30 +62,30 @@ export async function getStaticPaths() {
   };
 }
 
-// export async function getStaticProps({ params }) {
-//   const { data } = await client.query({
-//     query: GET_RESTAURANT_DISHES,
-//     variables: { slugUrl: params.slug },
-//   });
+export async function getStaticProps({ params }) {
+  const { data } = await client.query({
+    query: GET_RESTAURANT_DISHES,
+    variables: { slugUrl: params.slug },
+  });
 
-//   console.log(data);
+  console.log(data);
 
-//   const attrs = data.restaurants.data[0].attributes;
+  const attrs = data.restaurants.data[0].attributes;
 
-//   const dishes = attrs.dishes.data.map((dish) => ({
-//     name: dish.attributes.name,
-//     price: dish.attributes.price,
-//     description: dish.attributes.description,
-//     image: dish.attributes.image.data.attributes.url,
-//     // Add other dish properties as needed
-//   }));
+  const dishes = attrs.dishes.data.map((dish) => ({
+    name: dish.attributes.name,
+    price: dish.attributes.price,
+    description: dish.attributes.description,
+    image: dish.attributes.image.data.attributes.url,
+    // Add other dish properties as needed
+  }));
 
-//   return {
-//     props: {
-//       restaurant: {
-//         name: attrs.name,
-//         dishes,
-//       },
-//     },
-//   };
-// }
+  return {
+    props: {
+      restaurant: {
+        name: attrs.name,
+        dishes,
+      },
+    },
+  };
+}
