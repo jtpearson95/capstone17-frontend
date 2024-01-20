@@ -6,8 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@apollo/client": "^3.9.0-alpha.5",
-    "@apollo/experimental-nextjs-app-support": "^0.6.0",
+    "@apollo/client": "^3.8.10",
     "@formatjs/intl-localematcher": "^0.5.2",
     "@types/negotiator": "^0.6.3",
     "@types/qs": "^6.9.11",
