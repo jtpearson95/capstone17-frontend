@@ -12,10 +12,11 @@ import {
   Button
 } from "reactstrap";
 
-const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
+const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+console.log(`URL: ${STRAPI_URL}`);
 
 const client = new ApolloClient({
-  uri: `${STRAPI_URL}`,
+  uri: `${STRAPI_URL}/graphql`,
   cache: new InMemoryCache(),
 });
 
@@ -64,6 +65,8 @@ export async function getStaticProps({ params }) {
     query: GET_RESTAURANT_DISHES,
     variables: { slugUrl: params.slug },
   });
+
+  console.log(data);
 
   const attrs = data.restaurants.data[0].attributes;
 
