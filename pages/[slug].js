@@ -47,7 +47,8 @@ export default function RestaurantDishes({ restaurant }) {
 }
 
 export async function getStaticPaths() {
-  const { data } = await client.query({ query: GET_ALL_SLUGS });
+  // const { data } = await client.query({ query: GET_ALL_SLUGS });
+  const { data } = null;
 
   const paths = data.restaurants.data.map((restaurant) => {
     return { params: { slug: restaurant.attributes.urlSlug } };
@@ -60,10 +61,11 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const { data } = await client.query({
-    query: GET_RESTAURANT_DISHES,
-    variables: { slugUrl: params.slug },
-  });
+  // const { data } = await client.query({
+  //   query: GET_RESTAURANT_DISHES,
+  //   variables: { slugUrl: params.slug },
+  // });
+  const {data} = null;
 
   const attrs = data.restaurants.data[0].attributes;
 
