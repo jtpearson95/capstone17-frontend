@@ -46,18 +46,18 @@ export default function RestaurantDishes({ restaurant }) {
   );
 }
 
-export async function getStaticPaths() {
-  const { data } = await client.query({ query: GET_ALL_SLUGS });
+// export async function getStaticPaths() {
+//   const { data } = await client.query({ query: GET_ALL_SLUGS });
 
-  const paths = data.restaurants.data.map((restaurant) => {
-    return { params: { slug: restaurant.attributes.urlSlug } };
-  });
+//   const paths = data.restaurants.data.map((restaurant) => {
+//     return { params: { slug: restaurant.attributes.urlSlug } };
+//   });
 
-  return {
-    paths,
-    fallback: false,
-  };
-}
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
 
 export async function getStaticProps({ params }) {
   const { data } = await client.query({
