@@ -49,11 +49,39 @@ export default function RestaurantDishes({ restaurant }) {
 //   );
 // }
 
+// export async function getStaticPaths() {
+//   const { data } = await client.query({ query: GET_ALL_SLUGS });
+
+//   const paths = data.restaurants.data.map((restaurant) => {
+//     return { params: { slug: restaurant.attributes.urlSlug } };
+//   });
+
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
+
+// export async function getStaticPaths() {
+//   const { data } = await client.query({ query: GET_ALL_SLUGS });
+
+//   const paths = data.restaurants.data.map((restaurant) => {
+//     const urlSlug = restaurant?.attributes?.urlSlug || "";
+//     return { params: { slug: urlSlug } };
+//   });
+
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
+
 export async function getStaticPaths() {
   const { data } = await client.query({ query: GET_ALL_SLUGS });
 
   const paths = data.restaurants.data.map((restaurant) => {
-    return { params: { slug: restaurant.attributes.urlSlug } };
+    const urlSlug = restaurant?.attributes?.urlSlug || "";
+    return { params: { slug: urlSlug } };
   });
 
   return {
