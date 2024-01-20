@@ -12,12 +12,6 @@ import {
   Button
 } from "reactstrap";
 
-export default function RestaurantDishes() {
-  return(
-    <div>dishes here</div>
-  )
-};
-
 const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
 
 const client = new ApolloClient({
