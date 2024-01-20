@@ -51,6 +51,33 @@ export default function RestaurantDishes({ restaurant }) {
 
 export async function getStaticPaths() {
   const { data } = await client.query({ query: GET_ALL_SLUGS });
+  console.log(JSON.stringify(data));
+
+  data = {restaurants: {
+      "data": [
+        {
+          "attributes": {
+            "urlSlug": "sugidama"
+          }
+        },
+        {
+          "attributes": {
+            "urlSlug": "celeste"
+          }
+        },
+        {
+          "attributes": {
+            "urlSlug": "giulia"
+          }
+        },
+        {
+          "attributes": {
+            "urlSlug": "barra"
+          }
+        }
+      ]
+    }
+  }
 
   const paths = data.restaurants.data.map((restaurant) => {
     return { params: { slug: restaurant.attributes.urlSlug } };
