@@ -22,62 +22,33 @@ const client = new ApolloClient({
 
 export default function RestaurantDishes({ restaurant }) {
   return (
-    <div>Hello </div>
-  )};
-//     <div>
-//       <h1>{restaurant.name}</h1>
-//       <Row>
-//         {restaurant.dishes.map((dish, index) => (
-//           <Col key={index} xs="6" sm="4">
-//             <Card>
-//               <CardBody>
-//                 <CardTitle>{dish.name}</CardTitle>
-//                 <CardText>${dish.price}</CardText>
-//                 <CardText>{dish.description}</CardText>
-//                 <CardImg
-//                   top={true}
-//                   style={{ height: 200 }}
-//                   src={`${STRAPI_URL}${dish.image}`}
-//                 />
-//                 <Button>Add to Cart</Button>
-//               </CardBody>
-//             </Card>
-//           </Col>
-//         ))}
-//       </Row>
-//     </div>
-//   );
-// }
+    <div>
+      <h1>{restaurant.name}</h1>
+      <Row>
+        {restaurant.dishes.map((dish, index) => (
+          <Col key={index} xs="6" sm="4">
+            <Card>
+              <CardBody>
+                <CardTitle>{dish.name}</CardTitle>
+                <CardText>${dish.price}</CardText>
+                <CardText>{dish.description}</CardText>
+                <CardImg
+                  top={true}
+                  style={{ height: 200 }}
+                  src={`${STRAPI_URL}${dish.image}`}
+                />
+                <Button>Add to Cart</Button>
+              </CardBody>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </div>
+  );
+}
 
 export async function getStaticPaths() {
-  //const { data } = await client.query({ query: GET_ALL_SLUGS });
-  console.log(JSON.stringify(data));
-
-  data = {restaurants: {
-      "data": [
-        {
-          "attributes": {
-            "urlSlug": "sugidama"
-          }
-        },
-        {
-          "attributes": {
-            "urlSlug": "celeste"
-          }
-        },
-        {
-          "attributes": {
-            "urlSlug": "giulia"
-          }
-        },
-        {
-          "attributes": {
-            "urlSlug": "barra"
-          }
-        }
-      ]
-    }
-  }
+  const { data } = await client.query({ query: GET_ALL_SLUGS });
 
   const paths = data.restaurants.data.map((restaurant) => {
     return { params: { slug: restaurant.attributes.urlSlug } };
