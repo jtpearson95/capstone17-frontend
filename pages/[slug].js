@@ -1,16 +1,22 @@
-// import { ApolloClient, InMemoryCache } from "@apollo/client";
-// import React from "react";
-// import { GET_ALL_SLUGS, GET_RESTAURANT_DISHES } from "../graphql/queries";
-// import {
-//   Card,
-//   CardBody,
-//   CardTitle,
-//   CardText,
-//   Col,
-//   Row,
-//   CardImg,
-//   Button
-// } from "reactstrap";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
+import React from "react";
+import { GET_ALL_SLUGS, GET_RESTAURANT_DISHES } from "../graphql/queries";
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
+  Col,
+  Row,
+  CardImg,
+  Button
+} from "reactstrap";
+
+export default function RestaurantDishes() {
+  return(
+    <div>dishes here</div>
+  )
+};
 
 // const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
 
