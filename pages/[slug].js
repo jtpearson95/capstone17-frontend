@@ -69,7 +69,7 @@ export async function getStaticProps({ params }) {
   console.log(data);
 
   //const attrs = data.restaurants.data[0].attributes;
-  const attrs = data.restaurants.data[0];
+  const attrs = data.restaurants.data[0].attributes;
 
   const dishes = attrs.dishes.data.map((dish) => ({
     name: dish.attributes.name,
@@ -82,8 +82,8 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       restaurant: {
-        name: attrs.name,
-        dishes,
+        name: attrs.name || null,
+        dishes: dishes || null,
       },
     },
   };
