@@ -28,18 +28,13 @@ function CheckoutForm() {
     console.log("Form Data:", formData);
     const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
     const stripeToken = await stripe.createToken(cardElement);
+    console.log('STRIPE TOKEN HERE: '+ JSON.stringify(stripeToken));
 
     if (cardElement) {
-      const paymentMethodResult = await stripe.createPaymentMethod({
-        type: "card",
-        card: cardElement,
-      });
-
-      const paymentMethodId = paymentMethodResult.paymentMethod.id;
       const userToken = Cookies.get("token");
 
-      console.log("Payment Method ID:", paymentMethodId);
       console.log("User Token:", userToken);
+      console.log("STRIPE Token:", stripeToken);
 
       const requestBody = {
         data: {
@@ -48,7 +43,7 @@ function CheckoutForm() {
           address: formData.address,
           city: formData.city,
           state: formData.state,
-          payment_method: paymentMethodId, //token.token.id,
+          token: stripeToken.token.id
         },
       };
 
