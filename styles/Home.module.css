@@ -8,7 +8,7 @@
 }
 
 .title a {
-  color: #0070f3;
+  color: rgb(203, 24, 0);
   text-decoration: none;
 }
 
@@ -21,8 +21,13 @@
 .title {
   margin: 0 0 1rem;
   line-height: 1.15;
-  font-size: 3.6rem;
+  font-size: 4.5rem;
+  color: rgb(203, 24, 0);
+  font-family: 'CHEESE PIZZA', sans-serif;
+
 }
+
+
 
 .title {
   text-align: center;
@@ -78,6 +83,28 @@
   margin: 0;
   font-size: 1.25rem;
   line-height: 1.5;
+}
+
+.shoppingCartIcon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px; /* Adjust padding as needed */
+  color: #090101;
+}
+
+.homeIcon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px; /* Adjust padding as needed */
+  color:#090101;
+}
+
+.body {
+  background-color: #010305; /* Set your desired background color here */
+  margin: 0; /* Resergb(4, 210, 189)lt margin */
+  font-family: 'Arial', sans-serif; /* Set your desired font family */
 }
 
 .logo {

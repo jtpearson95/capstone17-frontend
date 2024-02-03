@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import React from "react";
+import React, { useState, useContext } from 'react';
 import { GET_ALL_SLUGS, GET_RESTAURANT_DISHES } from "../graphql/queries";
 import {
   Card,
@@ -11,8 +11,11 @@ import {
   CardImg,
   Button
 } from "reactstrap";
+import MyContext from "../components/context";
+import styles from "../styles/Home.module.css";
 
-const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
+// const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
+const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
 console.log(`URL: ${STRAPI_URL}`);
 
 const client = new ApolloClient({
@@ -21,31 +24,135 @@ const client = new ApolloClient({
 });
 
 export default function RestaurantDishes({ restaurant }) {
+  const { cart, setCart } = useContext(MyContext);
+
+  const addToCart = (dish) => {
+    setCart((prevCart) => {
+      const existingCartItemIndex = prevCart.items.findIndex(item => item.name === dish.name);
+  
+      if (existingCartItemIndex !== -1) {
+        // If item already exists in the cart, update the quantity
+        const updatedItems = [...prevCart.items];
+        updatedItems[existingCartItemIndex].quantity += 1;
+        const updatedTotalAmount = prevCart.totalAmount + dish.price;
+  
+        const newCart = {
+          items: updatedItems,
+          totalAmount: updatedTotalAmount,
+        };
+  
+        console.log('After update:', newCart);
+        return newCart;
+      } else {
+        // If item does not exist in the cart, add a new item
+        const updatedItems = [...prevCart.items, { name: dish.name, price: dish.price, quantity: 1 }];
+        const updatedTotalAmount = prevCart.totalAmount + dish.price;
+  
+        const newCart = {
+          items: updatedItems,
+          totalAmount: updatedTotalAmount,
+        };
+  
+        console.log('After update:', newCart);
+        return newCart;
+      }
+    });
+  };
+
   return (
-    <div>
-      <h1>{restaurant.name}</h1>
+    <div className="container">
+      <h1 className={styles.title}>{restaurant.name}</h1>
       <Row>
         {restaurant.dishes.map((dish, index) => (
           <Col key={index} xs="6" sm="4">
-            <Card>
+            <div className="card" >
+            {/* <Card> */}
               <CardBody>
-                <CardTitle>{dish.name}</CardTitle>
-                <CardText>${dish.price}</CardText>
-                <CardText>{dish.description}</CardText>
-                <CardImg
+              <CardImg
                   top={true}
-                  style={{ height: 200 }}
+                  style={{ height: 200, objectFit: 'cover' }}
                   src={`${STRAPI_URL}${dish.image}`}
                 />
-                <Button>Add to Cart</Button>
+                <h3 style={{ fontWeight: 'bold', marginTop: '10px' }}>{dish.name}</h3>
+                <p style={{ fontSize: '1.1rem', marginLeft: '0', marginBottom: '5px' }}>{dish.description}</p>
+                <div className="price-and-button">
+            <CardText style={{ fontSize: '1.5rem', marginLeft: '0', marginBottom: '5px', fontWeight: 'bold' }}>
+              ${dish.price}
+            </CardText>
+            <Button
+            color="dark"
+              onClick={() => addToCart(dish)}
+              style={{ marginLeft: 'auto', display: 'block',}}
+            >
+              Add to Cart
+            </Button>
+          </div>
               </CardBody>
-            </Card>
+            {/* </Card> */}
+            </div>
           </Col>
         ))}
       </Row>
+      <style jsx>{`
+          .container {
+            padding-top: 20px;
+          }
+
+          .price-and-button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+          }
+
+
+          .card {
+            margin: 1rem;
+            flex-basis: 45%;
+            padding: 1.5rem;
+            text-align: left;
+            color: inherit;
+            text-decoration: none;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            transition:
+              color 0.15s ease,
+              border-color 0.15s ease;
+          }
+
+          .card:hover,
+          .card:focus,
+          .card:active {
+            color: rgb(203, 24, 0);
+            border-color: rgb(203, 24, 0);
+          }
+
+          .card h3 {
+            margin: 0 0 1rem 0;
+            font-size: 1.5rem;
+          }
+
+          .card p {
+            margin: 0;
+            font-size: 1.25rem;
+            line-height: 1.5;
+          }
+        `}</style>
+      <style jsx global>{`
+  body {
+    background-color: #e7f1fc; /* Set your desired background color here */
+    margin: 0; /* Reset margin */
+    font-family: 'Arial', sans-serif; /* Set your desired font family */
+  }
+
+  .container {
+    padding-top: 20px;
+  }
+`}</style>
     </div>
   );
 }
+
 
 export async function getStaticPaths() {
   const { data } = await client.query({ query: GET_ALL_SLUGS });
@@ -56,7 +163,7 @@ export async function getStaticPaths() {
 
   return {
     paths: paths || [],
-    fallback: 'blocking',
+    fallback: false,
   };
 }
 

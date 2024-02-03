@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Link from "next/link";
 import {
@@ -9,36 +9,76 @@ import {
   NavbarText,
   Container,
 } from "reactstrap";
+import { useRouter } from 'next/router';
+import { ShoppingCart, Home, CircleUserRound } from 'lucide-react';
+import styles from '../styles/Home.module.css';
+import MyContext from './context';
 
 const Layout = ({ children }) => {
+  const router = useRouter();
+  const isRegisterPage = router.pathname === '/register';
+  const { user, cart } = useContext(MyContext);
+  console.log(cart);
+
+  const cartQuantity = cart.items.reduce((total, item) => total + item.quantity, 0);
+  
+
   return (
     <div>
-      <Navbar color="secondary" fixed="top" dark expand={true}>
-        <Nav className="me-auto" navbar>
+      {!isRegisterPage && (
+      <Navbar color="light" fixed="top" dark expand={true}>
+        <NavbarText className="me-auto" style={{ fontSize: '1.3rem', fontFamily: 'Arial', color: '#090101', fontWeight: 'bold', }}>welcome, {user}!</NavbarText>
+        <Nav className="ms-auto" navbar>
         <NavItem>
             <Link href="/" legacyBehavior>
-              <a className="nav-link">Home</a>
+            <div className={styles.homeIcon}>
+                <Home size={30} />
+              </div>
+              {/* <a className="nav-link">Home</a> */}
             </Link>
           </NavItem>
           <NavItem>
             <Link href="/account" legacyBehavior>
-              <a className="nav-link">Account</a>
+              {/* <a className="nav-link">Account</a> */}
+              <div className={styles.shoppingCartIcon}>
+                <CircleUserRound size={30} />
+              </div>
             </Link>
           </NavItem>
           <NavItem>
-            <Link href="/orders" legacyBehavior>
-              <a className="nav-link">Orders</a>
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link href="/cart" legacyBehavior>
-              <a className="nav-link">Cart</a>
+            <Link href="/checkout" legacyBehavior>
+            <div className={styles.shoppingCartIcon}>
+                <ShoppingCart size={30} /> 
+                {cart.items.length > 0 && <div className="cart-badge">{cartQuantity}</div>}
+              </div>
+              {/* <a className="nav-link">Checkout</a> */}
             </Link>
           </NavItem>
         </Nav>
-        <NavbarText>Restaurant App</NavbarText>
       </Navbar>
+      )}
       <Container style={{ marginTop: "60px" }}>{children}</Container>
+      <style jsx>{`
+  .cart-icon-container {
+    position: relative;
+    margin-right: 20px; /* Adjust margin as needed */
+  }
+
+  .cart-badge {
+    position: absolute;
+    top: 14px; /* Adjust top position as needed */
+    right: 10px; /* Adjust right position as needed */
+    background-color: rgb(203, 24, 0); /* Set background color */
+    color: white; /* Set text color */
+    border-radius: 50%; /* Make it circular */
+    width: 20px; /* Set width and height */
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px; /* Adjust font size */
+  }
+`}</style>
     </div>
   );
 };

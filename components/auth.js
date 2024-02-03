@@ -3,7 +3,7 @@ import Router from "next/router";
 import Cookie from "js-cookie";
 import axios from "axios";
 
-const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
+const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
 
 
 export const registerUser = (username, email, password) => {
@@ -52,5 +52,12 @@ export const loginUser = ( identifier, password) => {
           reject(error);
         });
     });
+  };
+
+  export const logoutUser = () => {
+    Cookie.remove("token");
+    delete window.__user;
+    window.localStorage.setItem('logout', Date.now());
+    Router.push('/');
   };
 
