@@ -9,7 +9,7 @@ import React, { useState, useContext, useEffect } from "react";
 import MyContext from '../components/context';
 import { useRouter } from 'next/router';
 
-const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
 const createApolloClient = () => {
   return new ApolloClient({

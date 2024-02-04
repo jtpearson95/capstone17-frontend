@@ -16,8 +16,7 @@ import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { logoutUser } from "../components/auth";
 import styles from '../styles/Home.module.css';
 
-// const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
-const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
 const User = ({allOrders}) => {
   console.log('All Orders ', allOrders);

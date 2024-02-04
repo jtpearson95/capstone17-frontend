@@ -27,7 +27,7 @@ function CheckoutForm() {
     //event.preventDefault();
     const cardElement = elements.getElement(CardElement);
     console.log("Form Data:", formData);
-    const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+    const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
     const stripeToken = await stripe.createToken(cardElement);
     console.log('STRIPE TOKEN HERE: '+ JSON.stringify(stripeToken));
 
