@@ -3,7 +3,8 @@ import Router from "next/router";
 import Cookie from "js-cookie";
 import axios from "axios";
 
-const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+// const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
 
 export const registerUser = (username, email, password) => {
