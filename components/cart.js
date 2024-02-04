@@ -1,9 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Card, CardBody, CardTitle } from "reactstrap";
 import MyContext from "./context";
 
 function Cart() {
   const { cart, setCart } = useContext(MyContext);
+
+  useEffect(() => {
+    // Recalculate total amount whenever cart items change
+    const updatedTotalAmount = calculateTotalAmount(cart.items);
+    setCart((prevCart) => ({ ...prevCart, totalAmount: updatedTotalAmount }));
+  }, [cart.items, setCart]);
 
   const addItem = (item) => {
     let updatedCart = { ...cart };
@@ -48,12 +54,26 @@ function Cart() {
     }
   };
 
+  // const calculateTotalAmount = (items) => {
+  //   return items.reduce(
+  //     (total, item) => total + (item.price || 0) * (item.quantity || 1),
+  //     0
+  //   );
+  // };
   const calculateTotalAmount = (items) => {
-    return items.reduce(
-      (total, item) => total + (item.price || 0) * (item.quantity || 1),
-      0
-    );
+    // Check if items is an array before using reduce
+    if (Array.isArray(items)) {
+      return items.reduce(
+        (total, item) => total + (item.price || 0) * (item.quantity || 1),
+        0
+      );
+    } else {
+      // Return 0 if items is not an array (e.g., when the cart is empty)
+      return 0;
+    }
   };
+
+
 
   const renderItems = () => {
     if (cart.items && cart.items.length) {
@@ -139,7 +159,7 @@ function Cart() {
             }}
           >
             <span>Order total:</span>
-            <span>${cart.totalAmount.toFixed(2)}</span>
+            {cart.totalAmount && <span>${cart.totalAmount.toFixed(2)}</span>}
           </div>
         </CardBody>
       </Card>

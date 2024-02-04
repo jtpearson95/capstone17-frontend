@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
   const { user, cart } = useContext(MyContext);
   console.log(cart);
 
-  const cartQuantity = cart.items.reduce((total, item) => total + item.quantity, 0);
+  const cartQuantity = cart.items ? cart.items.reduce((total, item) => total + item.quantity, 0) : 0;
   
 
   return (
@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
             <Link href="/checkout" legacyBehavior>
             <div className={styles.shoppingCartIcon}>
                 <ShoppingCart size={30} /> 
-                {cart.items.length > 0 && <div className="cart-badge">{cartQuantity}</div>}
+                {cart.items && cart.items.length > 0 && <div className="cart-badge">{cartQuantity}</div>}
               </div>
               {/* <a className="nav-link">Checkout</a> */}
             </Link>

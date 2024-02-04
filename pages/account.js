@@ -4,27 +4,35 @@ import {
   Col,
   Card,
   CardTitle,
-  CardText,
+  CardBody,
   List,
   Table,
 } from "reactstrap";
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import MyContext from "../components/context";
-import { GET_USERS } from "../graphql/queries";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+// import { GET_ORDERS } from "../graphql/queries";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { logoutUser } from "../components/auth";
 import styles from '../styles/Home.module.css';
 
 // const STRAPI_URL = process.env.STRAPI_URL || "https://capstone17-3fc1d2cfc034.herokuapp.com";
 const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
 
-const User = ({allUsers}) => {
-  console.log(allUsers);
+const User = ({allOrders}) => {
+  console.log('All Orders ', allOrders);
   const router = useRouter();
   const { user, setUser } = useContext(MyContext);
   const { email, setEmail } = useContext(MyContext);
   const { isAuthenticated, setIsAuthenticated } = useContext(MyContext);
+
+  const filteredOrders = allOrders.filter(order => order.attributes.email === email);
+  console.log('Filtered Orders:', filteredOrders);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getMonth() + 1}/${date.getDate()}`;
+  };
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -77,6 +85,7 @@ const User = ({allUsers}) => {
         </Col>
         <Col sm="8">
           <Card body style={{ height: "300px" }}>
+          <CardBody style={{ overflowY: 'auto' }}>
           <CardTitle tag="h5" style={{ color: 'rgb(203, 24, 0)', fontSize: '2rem', fontFamily: 'CHEESE PIZZA, sans-serif' }}>🍕 Order history</CardTitle>
               <Table>
                 <thead>
@@ -84,18 +93,19 @@ const User = ({allUsers}) => {
                     <th>#</th>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th>Restaurant</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>1/21</td>
-                    <td>$ 50.00</td>
-                    <td>Sugidama</td>
-                  </tr>
+                {filteredOrders.map((order, index) => (
+          <tr key={index}>
+            <th scope="row">{index + 1}</th>
+            <td>{formatDate(order.attributes.createdAt)}</td>
+            <td>${(order.attributes.amount / 100).toFixed(2)}</td>
+          </tr>
+        ))}
                 </tbody>
               </Table>
+              </CardBody>
           </Card>
         </Col>
       </Row>
@@ -124,19 +134,45 @@ const User = ({allUsers}) => {
 
 export default User;
 
-export async function getStaticProps() {
-  const client = new ApolloClient({
-    uri: `${STRAPI_URL}/graphql`,
-    cache: new InMemoryCache(),
-  });
+const GET_ORDERS = gql`
+query {
+  orders (sort: "createdAt:desc", pagination: { limit: 100 }) {
+    data {
+      id
+      attributes {
+        email
+        amount
+        createdAt
+        dishes
+      }
+    }
+  }
+}
+`
 
-  const { data } = await client.query({
-    query: GET_USERS,
-  });
+export async function getStaticProps(context) {
 
-  return {
-    props: {
-      allUsers: data.usersPermissionsUsers.data,
-    },
-  };
+  try {
+    const client = new ApolloClient({
+      uri: `${STRAPI_URL}/graphql`,
+      cache: new InMemoryCache(),
+    });
+
+    const { data } = await client.query({
+      query: GET_ORDERS,
+    });
+
+    return {
+      props: {
+        allOrders: data.orders.data,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+    return {
+      props: {
+        allOrders: [],
+      },
+    };
+  }
 }

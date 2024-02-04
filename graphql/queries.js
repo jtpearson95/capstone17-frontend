@@ -1,13 +1,15 @@
 import { gql } from '@apollo/client';
 
-const GET_USERS = gql`
+const GET_ORDERS = gql`
 query {
-  usersPermissionsUsers {
+  orders {
     data {
       id
       attributes {
-        username
         email
+        amount
+        createdAt
+        dishes
       }
     }
   }
@@ -77,4 +79,4 @@ const GET_RESTAURANT_DISHES = gql`
   }
 `;
 
-export { GET_USERS, GET_RESTAURANTS, GET_RESTAURANT_DISHES, GET_ALL_SLUGS };
+export { GET_RESTAURANTS, GET_RESTAURANT_DISHES, GET_ALL_SLUGS, GET_ORDERS };

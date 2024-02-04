@@ -13,7 +13,8 @@ function CheckoutForm() {
     state: "",
   });
   const [error, setError] = useState("");
-  const { cart, setCart } = useContext(MyContext);
+  const { cart } = useContext(MyContext);
+  const { email } = useContext(MyContext);
   const stripe = useStripe();
   const elements = useElements();
   console.log("Cart ", cart);
@@ -43,6 +44,7 @@ function CheckoutForm() {
           address: formData.address,
           city: formData.city,
           state: formData.state,
+          email: email,
           token: stripeToken.token.id
         },
       };
@@ -69,13 +71,20 @@ function CheckoutForm() {
         // Handle the response
         Cookies.set("response token", response.data.jwt);
         console.log("Request Body:", requestBody);
+
+
       } catch (error) {
         console.error("Error submitting order:", error);
         if (error.response && error.response.data) {
           console.log("Response data:", error.response.data);
         }
       }
+
+      
     }
+
+
+    
   }
 
   return (

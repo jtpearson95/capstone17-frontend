@@ -1,21 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Card, CardText, CardTitle } from 'reactstrap';
-import { useRouter } from 'next/router';
+import { Button, Row, Col, CardTitle } from 'reactstrap';
 import MyContext from "../components/context";
 import Cart from "../components/cart";
 import CheckoutForm from "../components/checkoutForm";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-
+import { useRouter } from "next/router";
 
 function Checkout(args) {
-  const { cart, setCart } = useContext(MyContext);
   const { isAuthenticated } = useContext(MyContext);
-  const [modal, setModal] = useState(false);
   const router = useRouter();
 
+  const STRIPE_KEY_PK = process.env.STRIPE_KEY_PK
+
   const stripePromise = loadStripe(
-    "pk_test_51OPXMbIpCo7yP5rrWYblVHuKccpGqqxoIoJTIy9uhGPNVGbcmO6Ttftk3WgRNjSyF2JxLeICAMguY33zYysfBxQS00TjQpyPVo"
+    STRIPE_KEY_PK
   )
 
   useEffect(() => {
@@ -24,18 +23,6 @@ function Checkout(args) {
       router.push('/register'); // Change 'login' to the actual route for login/register
     }
   }, [isAuthenticated]);
-
-  const goToOrders = () => {
-    router.push('/account');
-    toggle();
-  };
-
-  const goToHome = () => {
-    router.push('/');
-    toggle();
-  };
-
-  const toggle = () => setModal(!modal);
 
   return (
     <div className="container">
@@ -61,30 +48,6 @@ function Checkout(args) {
       <Elements stripe={stripePromise}>
           <CheckoutForm />
         </Elements>
-
-      <Button color="primary" onClick={toggle}>
-        Order
-      </Button>
-      <Modal isOpen={modal} toggle={toggle} {...args}>
-        <ModalHeader toggle={toggle}>Success Message!</ModalHeader>
-        <ModalBody>
-          Thank you! Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={goToOrders}>
-            Go to My Orders
-          </Button>{' '}
-          <Button color="secondary" onClick={goToHome}>
-            Go to Home
-          </Button>
-        </ModalFooter>
-      </Modal>
     </div>
   </Col>
 </Row>

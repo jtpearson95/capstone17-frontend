@@ -28,11 +28,12 @@ export default function RestaurantDishes({ restaurant }) {
 
   const addToCart = (dish) => {
     setCart((prevCart) => {
-      const existingCartItemIndex = prevCart.items.findIndex(item => item.name === dish.name);
+      // const existingCartItemIndex = prevCart.items.findIndex(item => item.name === dish.name);
+      const existingCartItemIndex = prevCart.items ? prevCart.items.findIndex(item => item.name === dish.name) : -1;
   
       if (existingCartItemIndex !== -1) {
         // If item already exists in the cart, update the quantity
-        const updatedItems = [...prevCart.items];
+        const updatedItems = [...(prevCart.items || [])];
         updatedItems[existingCartItemIndex].quantity += 1;
         const updatedTotalAmount = prevCart.totalAmount + dish.price;
   
@@ -45,7 +46,7 @@ export default function RestaurantDishes({ restaurant }) {
         return newCart;
       } else {
         // If item does not exist in the cart, add a new item
-        const updatedItems = [...prevCart.items, { name: dish.name, price: dish.price, quantity: 1 }];
+        const updatedItems = [...(prevCart.items || []), { name: dish.name, price: dish.price, quantity: 1 }];
         const updatedTotalAmount = prevCart.totalAmount + dish.price;
   
         const newCart = {
