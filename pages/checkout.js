@@ -15,6 +15,7 @@ function Checkout(args) {
 
   const stripePromise = loadStripe(`${STRIPE_KEY_PK}`);
   console.log('stripe promise', stripePromise);
+  console.log('stripe key', STRIPE_KEY_PK)
 
   useEffect(() => {
     if (!isAuthenticated) {
