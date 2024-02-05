@@ -11,11 +11,12 @@ function Checkout(args) {
   const { isAuthenticated } = useContext(MyContext);
   const router = useRouter();
 
-  const STRIPE_KEY_PK = process.env.STRIPE_KEY_PK
+  // const STRIPE_KEY_PK = process.env.STRIPE_KEY_PK
 
-  const stripePromise = loadStripe(`${STRIPE_KEY_PK}`);
-  console.log('stripe promise', stripePromise);
-  console.log('stripe key', STRIPE_KEY_PK)
+  const stripePromise = loadStripe("pk_test_51OPXMbIpCo7yP5rrWYblVHuKccpGqqxoIoJTIy9uhGPNVGbcmO6Ttftk3WgRNjSyF2JxLeICAMguY33zYysfBxQS00TjQpyPVo");
+  // const stripePromise = loadStripe(`${STRIPE_KEY_PK}`);
+  // console.log('stripe promise', stripePromise);
+  // console.log('stripe key', STRIPE_KEY_PK)
 
   useEffect(() => {
     if (!isAuthenticated) {
