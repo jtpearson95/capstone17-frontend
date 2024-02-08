@@ -9,7 +9,8 @@ import {
   Col,
   Row,
   CardImg,
-  Button
+  Button,
+  Input
 } from "reactstrap";
 import MyContext from "../components/context";
 import styles from "../styles/Home.module.css";
@@ -24,6 +25,13 @@ const client = new ApolloClient({
 
 export default function RestaurantDishes({ restaurant }) {
   const { cart, setCart } = useContext(MyContext);
+  const [searchTerm, setSearchTerm] = useState('');
+
+
+  const dishes = restaurant.dishes || [];
+  const filteredDishes = dishes.filter((dish) =>
+  dish.name.toLowerCase().includes(searchTerm.toLowerCase())
+);
 
   const addToCart = (dish) => {
     setCart((prevCart) => {
@@ -62,36 +70,45 @@ export default function RestaurantDishes({ restaurant }) {
   return (
     <div className="container">
       <h1 className={styles.title}>{restaurant.name}</h1>
-      <Row>
-        {restaurant.dishes.map((dish, index) => (
-          <Col key={index} xs="6" sm="4">
-            <div className="card" >
-            {/* <Card> */}
-              <CardBody>
-              <CardImg
-                  top={true}
-                  style={{ height: 200, objectFit: 'cover' }}
-                  src={`${STRAPI_URL}${dish.image}`}
-                />
-                <h3 style={{ fontWeight: 'bold', marginTop: '10px' }}>{dish.name}</h3>
-                <p style={{ fontSize: '1.1rem', marginLeft: '0', marginBottom: '5px' }}>{dish.description}</p>
-                <div className="price-and-button">
-            <CardText style={{ fontSize: '1.5rem', marginLeft: '0', marginBottom: '5px', fontWeight: 'bold' }}>
-              ${dish.price}
-            </CardText>
-            <Button
-            color="dark"
-              onClick={() => addToCart(dish)}
-              style={{ marginLeft: 'auto', display: 'block',}}
-            >
-              Add to Cart
-            </Button>
-          </div>
-              </CardBody>
-            {/* </Card> */}
-            </div>
-          </Col>
-        ))}
+      <Input
+            type="text"
+            placeholder="&#128269; Search for dishes..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ width: '650px', margin: '0 auto', marginBottom: "10px" }}
+          />
+     <Row>
+        {filteredDishes.length > 0 ? (
+          filteredDishes.map((dish, index) => (
+            <Col key={index} xs="6" sm="4">
+              <div className="card" >
+                <CardBody>
+                  <CardImg
+                    top={true}
+                    style={{ height: 200, objectFit: 'cover' }}
+                    src={`${STRAPI_URL}${dish.image}`}
+                  />
+                  <h3 style={{ fontWeight: 'bold', marginTop: '10px' }}>{dish.name}</h3>
+                  <p style={{ fontSize: '1.1rem', marginLeft: '0', marginBottom: '5px' }}>{dish.description}</p>
+                  <div className="price-and-button">
+                    <CardText style={{ fontSize: '1.5rem', marginLeft: '0', marginBottom: '5px', fontWeight: 'bold' }}>
+                      ${dish.price}
+                    </CardText>
+                    <Button
+                      color="dark"
+                      onClick={() => addToCart(dish)}
+                      style={{ marginLeft: 'auto', display: 'block' }}
+                    >
+                      Add to Cart
+                    </Button>
+                  </div>
+                </CardBody>
+              </div>
+            </Col>
+          ))
+        ) : (
+          <p>No matching dishes found.</p>
+        )}
       </Row>
       <style jsx>{`
           .container {

@@ -66,6 +66,7 @@ function Checkout(args) {
 
   .container {
     padding-top: 20px;
+    padding-bottom: 30px;
   }
 `}</style>
       </div>

@@ -17,10 +17,11 @@ function CardSection(props) {
 
   const handleOrder = async () => {
     try {
-      await props.submitOrder(props.data);
-
-      clearCart();
-      toggle();
+      if (props.formValid) {
+        await props.submitOrder(props.data);
+        clearCart();
+        toggle();
+      }
     } catch (error) {
       console.error("Error submitting order:", error);
     }
@@ -53,8 +54,7 @@ function CardSection(props) {
               </div>
               <br />
               <div className="order-button-wrapper">
-                {/* <button onClick={() => props.submitOrder(props.data)}>Confirm order</button> */}
-                <button onClick={handleOrder}>Confirm order</button>
+                <Button color="secondary" onClick={handleOrder} disabled={!props.formValid}>Confirm order</Button>
               </div>
               <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Success Message!</ModalHeader>

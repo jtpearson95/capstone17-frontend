@@ -1,10 +1,18 @@
-import React, { useState, useContext } from "react";
-import { Card, CardBody, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import React, { useState, useContext, useEffect } from "react";
+import {
+  Card,
+  CardBody,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Alert,
+} from "reactstrap";
 import { registerUser, loginUser } from "../components/auth";
-import MyContext from '../components/context';
-import backgroundImage from '../public/restaurant_vegetables.jpg';
-import styles from '../styles/Home.module.css';
-
+import MyContext from "../components/context";
+import backgroundImage from "../public/restaurant_vegetables.jpg";
+import styles from "../styles/Home.module.css";
 
 const Register = () => {
   const [data, setData] = useState({ email: "", username: "", password: "" });
@@ -13,21 +21,42 @@ const Register = () => {
   const { user, setUser } = useContext(MyContext);
   const { email, setEmail } = useContext(MyContext);
   const { isAuthenticated, setIsAuthenticated } = useContext(MyContext);
-  
-    return (
-      <div className="container">
-        <main>
-          <div className="content">
-          <h1 style={{ color: 'white', fontSize: '5.8rem', fontFamily: 'CHEESE PIZZA, sans-serif' }}>
-  The Restaurant App
-</h1>
-            <p style={{ color: 'powderblue', fontSize: '1.8rem', fontStyle: 'italic' }}>
-              welcome and make an account for this cool new app where you can
-              order food from local restaurants
-            </p>
-          </div>
-        </main>
+  const [notification, setNotification] = useState(null);
 
+
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000); // Auto-hide after 3 seconds
+  };
+
+  return (
+    <div className="container">
+      <main>
+        <div className="content">
+          <h1
+            style={{
+              color: "white",
+              fontSize: "5.8rem",
+              fontFamily: "CHEESE PIZZA, sans-serif",
+            }}
+          >
+            The Restaurant App
+          </h1>
+          <p
+            style={{
+              color: "powderblue",
+              fontSize: "1.8rem",
+              fontStyle: "italic",
+            }}
+          >
+            welcome and make an account for this cool new app where you can
+            order food from local restaurants
+          </p>
+        </div>
+      </main>
+      <div>
         <Card
           className="my-2"
           color="dark"
@@ -89,6 +118,10 @@ const Register = () => {
                         setUser(data.username);
                         setEmail(data.email);
                         setIsAuthenticated(true);
+                        showNotification(
+                          "Registration succeeded! Please log in.",
+                          "success"
+                        );
                         console.log(
                           `registered user: ${JSON.stringify(res.data)}`
                         );
@@ -97,6 +130,10 @@ const Register = () => {
                         console.log(`error in register: ${error}`);
                         //setError(error.response.data);
                         setLoading(false);
+                        showNotification(
+                          "Registration failed. Please try again.",
+                          "danger"
+                        );
                       });
                   }}
                 >
@@ -124,6 +161,10 @@ const Register = () => {
                       .catch((error) => {
                         //setError(error.response.data);
                         setLoading(false);
+                        showNotification(
+                          "Log in failed. Please try again.",
+                          "danger"
+                        );
                       });
                   }}
                 >
@@ -133,31 +174,34 @@ const Register = () => {
             </Form>
           </CardBody>
         </Card>
+        {notification && (
+          <Alert color={notification.type}>{notification.message}</Alert>
+        )}
+      </div>
       <style jsx>{`
-          .container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 5.4rem 1.5rem;
-            height: 100%; /* Set container height to 100% of the viewport height */
-          }
+        .container {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          padding: 5.4rem 1.5rem;
+          height: 100%; /* Set container height to 100% of the viewport height */
+        }
 
-          main {
-            flex: 1;
-          }
+        main {
+          flex: 1;
+        }
 
-          body,
-          html {
-            margin: 0;
-            height: 100vh;
-            width: 100vw;
-          }
-          .content {
-            max-width: 650px;
-          }
-
-        `}</style>
-         <style jsx global>{`
+        body,
+        html {
+          margin: 0;
+          height: 100vh;
+          width: 100vw;
+        }
+        .content {
+          max-width: 650px;
+        }
+      `}</style>
+      <style jsx global>{`
   body {
     background-color: #010305;; /* Set your desired background color here */
     background-image: url('restaurant_pizza.jpg');
@@ -178,8 +222,8 @@ const Register = () => {
     width: 100%;
   }
 `}</style>
-      </div>
-    );
+    </div>
+  );
 };
 
 export default Register;

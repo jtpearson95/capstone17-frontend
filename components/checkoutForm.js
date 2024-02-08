@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { FormGroup, Label, Input } from "reactstrap";
+import React, { useState, useContext, useEffect } from "react";
+import { FormGroup, Label, Input, FormFeedback } from "reactstrap";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import CardSection from "./cardSection";
 import Cookies from "js-cookie";
@@ -18,20 +18,51 @@ function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   console.log("Cart ", cart);
+  const [formValid, setFormValid] = useState(false)
+
+  ///////////////////////////////
+  const [submitted, setSubmitted] = useState(false);
+  
+  const [errors, setErrors] = useState({
+    address: "",
+    city: "",
+    state: "",
+  });
+
+  useEffect(() => {
+    validateForm();
+  }, [data]); 
 
   function onChange(e) {
     setData({ ...data, [e.target.name]: e.target.value });
+    console.log("Data after change:", data);
+    validateForm();
+  }
+
+  const validateForm = () => {
+    const errorsCopy = { ...errors };
+    errorsCopy.address = data.address.trim() === "" ? "Address is required" : "";
+    errorsCopy.city = data.city.trim() === "" ? "City is required" : "";
+    errorsCopy.state = data.state.trim() === "" ? "State is required" : "";
+
+    setErrors(errorsCopy);
+
+    const isValid = Object.values(errorsCopy).every((error) => error === "");
+    setFormValid(isValid);
   }
 
   async function submitOrder(formData) {
-    //event.preventDefault();
+    // e.preventDefault();
     const cardElement = elements.getElement(CardElement);
     console.log("Form Data:", formData);
     const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
     const stripeToken = await stripe.createToken(cardElement);
     console.log('STRIPE TOKEN HERE: '+ JSON.stringify(stripeToken));
 
-    if (cardElement) {
+    /////////////////////////
+    setSubmitted(true);
+
+    if (formValid && cardElement) {
       const userToken = Cookies.get("token");
 
       console.log("User Token:", userToken);
@@ -72,19 +103,13 @@ function CheckoutForm() {
         Cookies.set("response token", response.data.jwt);
         console.log("Request Body:", requestBody);
 
-
       } catch (error) {
         console.error("Error submitting order:", error);
         if (error.response && error.response.data) {
           console.log("Response data:", error.response.data);
         }
-      }
-
-      
+      } 
     }
-
-
-    
   }
 
   return (
@@ -93,8 +118,8 @@ function CheckoutForm() {
       <FormGroup style={{ display: "flex" }}>
         <div
           style={{
-            flex: "0.9",
-            marginRight: 10,
+            flex: "1",
+            marginRight: 0,
             marginBottom: "-15px",
             marginTop: "10px",
           }}
@@ -102,25 +127,28 @@ function CheckoutForm() {
           <Label style={{ marginRight: 10, marginBottom: "-15px" }}>
             Address
           </Label>
-          <Input name="address" onChange={onChange} />
+          <Input name="address" onChange={onChange} invalid={submitted && !!errors.address} />
+          <FormFeedback style={{ fontSize: '14px', marginTop: '-15px' }}>{submitted && errors.address}</FormFeedback>
         </div>
       </FormGroup>
       <FormGroup style={{ display: "flex" }}>
-        <div style={{ flex: "0.63", marginRight: "6%" }}>
+        <div style={{ flex: "0.65", marginRight: "6%" }}>
           <Label style={{ marginRight: 10, marginBottom: "-15px" }}>City</Label>
-          <Input name="city" onChange={onChange} />
+          <Input name="city" onChange={onChange} invalid={submitted && !!errors.city}/>
+          <FormFeedback style={{ fontSize: '14px', marginTop: '-15px' }}>{submitted && errors.city}</FormFeedback>
         </div>
-        <div style={{ flex: "0.25", marginRight: 0 }}>
+        <div style={{ flex: "0.23", marginRight: 0 }}>
           <Label
             style={{ flex: "0.90", marginRight: 10, marginBottom: "-15px" }}
           >
             State
           </Label>
-          <Input name="state" onChange={onChange} />
+          <Input name="state" onChange={onChange} invalid={submitted && !!errors.state}/>
+          <FormFeedback style={{ fontSize: '14px', marginTop: '-15px' }}>{submitted && errors.state}</FormFeedback>
         </div>
       </FormGroup>
 
-      <CardSection data={data} stripeError={error} submitOrder={submitOrder} />
+      <CardSection data={data} stripeError={error} submitOrder={submitOrder} formValid={formValid} />
 
       <style jsx global>
         {`
@@ -146,14 +174,6 @@ function CheckoutForm() {
             font-size: 18px;
             font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
           }
-          h1 {
-            color: #32325d;
-            font-weight: 400;
-            line-height: 50px;
-            font-size: 40px;
-            margin: 20px 0;
-            padding: 0;
-          }
           .Checkout {
             margin: 0 auto;
             max-width: 800px;
@@ -165,40 +185,10 @@ function CheckoutForm() {
             font-weight: 300;
             letter-spacing: 0.025em;
           }
-          button {
-            white-space: nowrap;
-            border: 0;
-            outline: 0;
-            display: inline-block;
-            height: 40px;
-            line-height: 40px;
-            padding: 0 14px;
-            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
-              0 1px 3px rgba(0, 0, 0, 0.08);
-            color: #fff;
-            border-radius: 4px;
-            font-size: 15px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.025em;
-            background-color: #6772e5;
-            text-decoration: none;
-            -webkit-transition: all 150ms ease;
-            transition: all 150ms ease;
-            margin-top: 0px;
-          }
           form {
             margin-bottom: 40px;
             padding-bottom: 40px;
             border-bottom: 3px solid #e6ebf1;
-          }
-          button:hover {
-            color: #fff;
-            cursor: pointer;
-            background-color: #7795f8;
-            transform: translateY(-1px);
-            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1),
-              0 3px 6px rgba(0, 0, 0, 0.08);
           }
           input,
           .StripeElement {

@@ -27,16 +27,17 @@ const Layout = ({ children }) => {
     <div>
       {!isRegisterPage && (
       <Navbar color="light" fixed="top" dark expand={true}>
-        <NavbarText className="me-auto" style={{ fontSize: '1.3rem', fontFamily: 'Arial', color: '#090101', fontWeight: 'bold', }}>welcome, {user}!</NavbarText>
-        <Nav className="ms-auto" navbar>
+        <Nav className="me-auto" navbar>
         <NavItem>
             <Link href="/" legacyBehavior>
-            <div className={styles.homeIcon}>
+            <div className={styles.shoppingCartIcon}>
                 <Home size={30} />
               </div>
-              {/* <a className="nav-link">Home</a> */}
             </Link>
           </NavItem>
+          </Nav>
+        <Nav className="ms-auto" navbar>
+          <NavbarText style={{ fontSize: '1.3rem', fontFamily: 'Arial', color: '#090101', fontWeight: 'bold', }}>welcome, {user}!</NavbarText>
           <NavItem>
             <Link href="/account" legacyBehavior>
               {/* <a className="nav-link">Account</a> */}

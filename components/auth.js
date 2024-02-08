@@ -20,8 +20,6 @@ export const registerUser = (username, email, password) => {
             Cookie.set("token", res.data.jwt);
 
             resolve(res);
-
-            Router.push("/");
         })
         .catch((error) => {
             reject(error);

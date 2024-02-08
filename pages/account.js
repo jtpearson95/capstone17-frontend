@@ -154,7 +154,7 @@ export async function getStaticProps(context) {
   try {
     const client = new ApolloClient({
       uri: `${STRAPI_URL}/graphql`,
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({ resultCaching: false }),
     });
 
     const { data } = await client.query({
