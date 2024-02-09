@@ -149,7 +149,7 @@ query {
 }
 `
 // export const dynamic = 'force-dynamic';
-export const revalidate = 1; //revalidate api every 1 second
+//export const revalidate = 1; //revalidate api every 1 second
 export async function getStaticProps(context) {
 
   try {
@@ -166,6 +166,7 @@ export async function getStaticProps(context) {
       props: {
         allOrders: data.orders.data,
       },
+      revalidate: 1,
     };
   } catch (error) {
     console.error("Error fetching data:", error.message);
@@ -173,6 +174,7 @@ export async function getStaticProps(context) {
       props: {
         allOrders: [],
       },
+      revalidate: 1,
     };
   }
 }
