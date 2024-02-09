@@ -148,8 +148,8 @@ query {
   }
 }
 `
-export const dynamic = 'force-dynamic';
-// export const revalidate = 1; //revalidate api every 1 second
+// export const dynamic = 'force-dynamic';
+export const revalidate = 1; //revalidate api every 1 second
 export async function getStaticProps(context) {
 
   try {
