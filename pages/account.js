@@ -148,10 +148,36 @@ query {
   }
 }
 `
-export const dynamic = 'force-dynamic';
-//export const revalidate = 1; //revalidate api every 1 second
-export async function getStaticProps(context) {
+// export async function getStaticProps(context) {
 
+//   try {
+//     const client = new ApolloClient({
+//       uri: `${STRAPI_URL}/graphql`,
+//       cache: new InMemoryCache({ resultCaching: false }),
+//     });
+
+//     const { data } = await client.query({
+//       query: GET_ORDERS,
+//     });
+
+//     return {
+//       props: {
+//         allOrders: data.orders.data,
+//       },
+//       revalidate: 1,
+//     };
+//   } catch (error) {
+//     console.error("Error fetching data:", error.message);
+//     return {
+//       props: {
+//         allOrders: [],
+//       },
+//       revalidate: 1,
+//     };
+//   }
+// }
+
+export async function getServerSideProps(context) {
   try {
     const client = new ApolloClient({
       uri: `${STRAPI_URL}/graphql`,
@@ -166,7 +192,6 @@ export async function getStaticProps(context) {
       props: {
         allOrders: data.orders.data,
       },
-      revalidate: 0,
     };
   } catch (error) {
     console.error("Error fetching data:", error.message);
@@ -174,7 +199,6 @@ export async function getStaticProps(context) {
       props: {
         allOrders: [],
       },
-      revalidate: 0,
     };
   }
 }
